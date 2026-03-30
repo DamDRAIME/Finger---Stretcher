@@ -7,26 +7,40 @@ from typing import Optional
 
 
 def mergeKLists(lists: list[Optional["ListNode"]]) -> Optional["ListNode"]:
-    lists = [ln for ln in lists if ln]
-    if not lists or not lists[0]:
+    if not lists or len(lists) == 0:
         return None
-    head = None
-    pointer = None
-    while lists:
-        j = 0
-        min_node = lists[j]
-        for i, x in enumerate(lists[1:], 1):
-            if x.val < min_node.val:
-                min_node = x
-                j = i
-        if not head:
-            head = ListNode(min_node.val)
-            pointer = head
-        else:
-            pointer.next = ListNode(min_node.val)
-            pointer = pointer.next
-        lists.pop(j)
-        if min_node.next is not None:
-            lists.append(min_node.next)
 
-    return head
+    while len(lists) > 1:
+        temp_lists = []
+        while len(lists) > 1:
+            temp_lists.append(merge_two_sorted_lists(lists.pop(), lists.pop()))
+        if lists:
+            temp_lists.append(merge_two_sorted_lists(lists.pop(), temp_lists.pop()))
+        lists = temp_lists
+
+    return lists[0]
+
+
+def merge_two_sorted_lists(l1: Optional["ListNode"], l2: Optional["ListNode"]) -> Optional["ListNode"]:
+    if not l1:
+        return l2
+    if not l2:
+        return l1
+
+    pointer = ListNode()
+    head = pointer
+    while l1 and l2:
+        if l1.val < l2.val:
+            pointer.next = l1
+            l1 = l1.next
+        else:
+            pointer.next = l2
+            l2 = l2.next
+        pointer = pointer.next
+
+    if l1:
+        pointer.next = l1
+    elif l2:
+        pointer.next = l2
+
+    return head.next
