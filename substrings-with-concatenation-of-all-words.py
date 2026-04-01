@@ -20,17 +20,19 @@ def findSubstring(s: str, words: list[str]) -> list[int]:
 
 
 def get_permutations(words: list[str]) -> None:
+    global PERMUTATIONS
     for word in words:
         generate_permutations(word)
     PERMUTATIONS = set("".join(p) for p in PERMUTATIONS)
 
 
 def generate_permutations(word: str) -> None:
+    global PERMUTATIONS
     if len(PERMUTATIONS) == 0:
         PERMUTATIONS = {(word,)}
         return
-    perms = set()
+    perms = []
     for permutation in PERMUTATIONS:
         for i in range(len(permutation) + 1):
-            perms.add(permutation[:i] + (word,) + permutation[i:])
+            perms.append(permutation[:i] + (word,) + permutation[i:])
     PERMUTATIONS = perms
