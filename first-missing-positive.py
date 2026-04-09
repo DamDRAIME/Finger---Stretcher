@@ -17,21 +17,16 @@ def firstMissingPositive(nums: list[int]) -> int:
         if x == -1:
             continue
         nums[i] = 0
-        if x > 0 and x <= n_pos:
-            if x < i:
+        while True:
+            if x > 0 and x <= n_pos:
+                temp = nums[x - 1]
                 nums[x - 1] = -1
+                if x <= i:
+                    break
+                else:
+                    x = temp
             else:
-                while True:
-                    y = nums[x - 1]
-                    nums[x - 1] = -1
-                    if y > 0 and y <= n_pos:
-                        if y <= i:
-                            nums[y - 1] = -1
-                            break
-                        else:
-                            x, y = y, nums[y - 1]
-                    else:
-                        break
+                break
 
     for i, x in enumerate(nums, 1):
         if x == 0:
