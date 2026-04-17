@@ -8,15 +8,11 @@ def multiply(num1: str, num2: str) -> str:
     if num1 == "0" or num2 == "0":
         return "0"
     mult = [0] * (len(num1) + len(num2))
-    offset = 0
-    for x in num1[::-1]:
-        carry_over = 0
+    for offset, x in enumerate(num1[::-1]):
         x = int(x)
         for i, y in enumerate(num2[::-1], offset):
-            m = (x * int(y)) + carry_over
+            m = x * int(y)
             s = mult[i] + (m % 10)
-            carry_over = m // 10 + int(s >= 10)
-            mult[i] = (s) % 10
-        mult[i + 1] += carry_over
-        offset += 1
+            mult[i] = s % 10
+            mult[i + 1] += s // 10
     return "".join(map(str, mult[::-1])).removeprefix("0")
