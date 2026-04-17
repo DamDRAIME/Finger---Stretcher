@@ -2,23 +2,18 @@
 
 # Return the minimum number of jumps to reach index n - 1
 
-min_n_jumps = None
+from collections import defaultdict
 
 
 def jump(nums: list[int]) -> int:
-    jump_count(nums)
-    return min_n_jumps
-
-
-def jump_count(nums: list[int], n_jumps: int = 0) -> None:
-    global min_n_jumps
-    if len(nums) <= 1:
-        min_n_jumps = n_jumps if min_n_jumps is None else min(min_n_jumps, n_jumps)
-        return
-
-    x = nums[0]
-    if x == 0:
-        return
-
-    for j in range(1, x + 1):
-        jump_count(nums[j:], n_jumps + 1)
+    n = len(nums)
+    if n == 1:
+        return 0
+    memory_jumps = defaultdict(lambda: 10**4)
+    memory_jumps[n - 1] = 0
+    for i in range(n - 2, -1, -1):
+        if (x := nums[i]) == 0:
+            continue
+        next_n_jumps = min(memory_jumps[i + j] for j in range(1, x + 1))
+        memory_jumps[i] = next_n_jumps + 1
+    return memory_jumps[0]
